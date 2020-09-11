@@ -28,7 +28,9 @@
 
   - name: install mysql devel
     yum:
-      name: Percona-Server-devel-57
+      name:
+        - Percona-Server-devel-57
+        - Percona-Server-server-57
       state: present
 
   - name: mydumper git repo
@@ -59,7 +61,7 @@
   - name: fetch binaries
     fetch:
       src: "{{ item }}"
-      dest: "/opt/src/mydumper/{{ inventory_hostname }}/"
+      dest: "/tmp/src/mydumper/{{ inventory_hostname }}/"
       flat: yes
     with_items:
       - "{{ srcdir }}/mydumper"
