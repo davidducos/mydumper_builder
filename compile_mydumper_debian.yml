@@ -20,18 +20,9 @@
       state=present
   - name: ensure pre-requsites are installed
     apt:
-      name={{ item }}
-      state=present
-    with_items:
-      - libglib2.0-dev
-      - zlib1g-dev
-      - libpcre3-dev
-      - libssl-dev
-      - cmake
-      - g++
-      - git
-      - libperconaserverclient20-dev
-      - libperconaserverclient20
+      name: [ 'libglib2.0-dev','zlib1g-dev','libpcre3-dev','libssl-dev','cmake','g++','git','libperconaserverclient20-dev','libperconaserverclient20','percona-server-server-5.7' ]
+      state: present
+
   - name: mydumper git repo
     become_user: vagrant
     git:
@@ -56,7 +47,7 @@
   - name: fetch binaries
     fetch:
       src={{ item }}
-      dest=/opt/src/mydumper/{{ inventory_hostname }}/
+      dest=/tmp/src/mydumper/{{ inventory_hostname }}/
       flat=yes
     with_items:
       - "{{ srcdir }}/mydumper"

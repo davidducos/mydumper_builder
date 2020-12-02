@@ -3,10 +3,22 @@
 
 Vagrant.configure(2) do |config|
 
+  # Prevent VirtualBox from enable the COM port which causes issues on some OS.
+  config.vm.provider "virtualbox" do |vb|
+    vb.customize [ "modifyvm", :id, "--uart1", "off" ]
+    vb.customize [ "modifyvm", :id, "--uart2", "off" ]
+    vb.customize [ "modifyvm", :id, "--uart3", "off" ]
+    vb.customize [ "modifyvm", :id, "--uart4", "off" ]
+  end
+
   config.vm.define :el6 do |el6|
-      el6.vm.box = "centos/6"
-      el6.vm.provision :ansible do |ansible|
+    el6.vm.box = "centos/6"
+    el6.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_rhel.yml"
+    end
+    el6.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
     end
   end
 
@@ -14,6 +26,10 @@ Vagrant.configure(2) do |config|
     el7.vm.box = "centos/7"
     el7.vm.provision :ansible do |ansible|  
       ansible.playbook = "compile_mydumper_rhel.yml"
+    end
+    el7.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
     end
   end
 
@@ -61,10 +77,10 @@ Vagrant.configure(2) do |config|
   # Ubuntu 16
   config.vm.define :xenial do |xenial|
     xenial.vm.box = "ubuntu/xenial64"
-    xenial.vm.provision "install pyhton 2.7",
-      type: "shell",
-      preserve_order: true,
-      inline: "apt-get -y install python"
+#    xenial.vm.provision "install pyhton 2.7",
+#      type: "shell",
+#      preserve_order: true,
+#      inline: "apt-get -y install python"
     xenial.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
     end
@@ -78,6 +94,22 @@ Vagrant.configure(2) do |config|
       preserve_order: true,
       inline: "apt-get -y install python"
     bionic.vm.provision :ansible do |ansible|
+      ansible.playbook = "compile_mydumper_debian.yml"
+    end
+    bionic.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+    end
+  end
+
+  # Ubuntu 20.04
+  config.vm.define :focal do |focal|
+    focal.vm.box = "ubuntu/focal64"
+#    focal.vm.provision "install pyhton 2.7",
+#      type: "shell",
+#      preserve_order: true,
+#      inline: "apt-get -y install python"
+    focal.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
     end
   end
