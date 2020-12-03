@@ -16,23 +16,40 @@ mydumper binaries and packages automation
 # Compiling binaries
 
 ```
+ln -s Vagrantfile.deploy Vagrantfile
 vagrant up [os]
 ```
 Where os is one of:
-- el6
 - el7
 - el8
-- stretch
 - jessie
-- wheezy
+- stretch
+- buster
 - trusty
 - xenial
 - bionic
+- focal
 
 # Creating packages
-
+Install dependecies
+```
 yum install epel-release
-
 yum install rpm-build dpkg dpkg-devel fakeroot
-
+```
+On mydumper repository execute:
+```
 ./package/build.sh $VERSION $BUILD_NUMBER
+```
+For instance:
+```
+./package/build.sh 0.5.7 1
+```
+Testing step:
+```
+unlik Vagrantfile
+ln -s Vagrantfile.test Vagrantfile
+vagrant up [os] --provision
+```
+
+
+
