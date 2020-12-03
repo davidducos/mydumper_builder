@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  vars:
+    srcfilename: mydumper_0.9.5-1.{{ ansible_distribution_release }}_amd64.deb
+  tasks:
+  - name: Copy package
+    copy:
+      src: "/opt/PKGS/{{ srcfilename }}"
+      dest: /tmp/
+      #      validate: /usr/sbin/visudo -csf %s
+  - name: Install package
+    apt:
+      deb: "/tmp/{{ srcfilename }}"
+  - name: Test mydumper
+    command: mydumper

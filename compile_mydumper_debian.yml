@@ -9,6 +9,11 @@
       name: dirmngr
       state: present
     when: ansible_distribution_release == "stretch"
+  - name: debian 10 needs gpg 
+    apt:
+      name: gpg
+      state: present
+    when: ansible_distribution_release == "buster"
   - name: install percona server apt-key
     apt_key:
       keyserver: keys.gnupg.net

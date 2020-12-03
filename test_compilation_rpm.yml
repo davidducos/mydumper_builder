@@ -1,0 +1,37 @@
+---
+- hosts: all
+  become: true
+  vars:
+    srcfilename: mydumper-0.9.5-1.el{{ ansible_distribution_major_version }}.x86_64.rpm
+    mytext: |
+      [client]
+      password=s8auyp8:ciwS
+  tasks:
+  - name: Copy package
+    copy:
+      src: "/opt/PKGS/{{ srcfilename }}"
+      dest: /tmp/
+      #      validate: /usr/sbin/visudo -csf %s
+  - name: Install package
+    yum:
+      name: "/tmp/{{ srcfilename }}"
+      state: present
+  - name: Start service mysql, if not started
+    service:
+      name: mysql
+      state: started
+
+  - name: Get temporary password
+    shell: cat /var/log/mysqld.log | grep 'temporary password' | grep -oE '[^ ]+$'
+    register: tmp_root_password
+
+  - name: Set new password from temporary password
+    shell: 'mysql -e "SET PASSWORD = ''s8auyp8:ciwS'';" --connect-expired-password -uroot -p"{{ tmp_root_password.stdout }}"'
+
+  - name: Creating my.cnf file for root user
+    copy:
+      content: "{{ mytext }}"
+      dest: /root/.my.cnf
+
+  - name: Test mydumper
+    command: mydumper
