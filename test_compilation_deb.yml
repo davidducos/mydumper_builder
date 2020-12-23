@@ -2,7 +2,7 @@
 - hosts: all
   become: true
   vars:
-    srcfilename: mydumper_0.9.5-1.{{ ansible_distribution_release }}_amd64.deb
+    srcfilename: mydumper_{{ version }}-1.{{ ansible_distribution_release }}_amd64.deb
   tasks:
   - name: Copy package
     copy:
@@ -14,3 +14,8 @@
       deb: "/tmp/{{ srcfilename }}"
   - name: Test mydumper
     command: mydumper
+  - name: Test mydumper version
+    command: mydumper --version    
+    register: cat
+  - name: Printing Version
+    debug: var=cat.stdout

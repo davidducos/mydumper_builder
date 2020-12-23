@@ -2,7 +2,7 @@
 - hosts: all
   become: true
   vars:
-    srcfilename: mydumper-0.9.5-1.el{{ ansible_distribution_major_version }}.x86_64.rpm
+    srcfilename: mydumper-{{ version }}-1.el{{ ansible_distribution_major_version }}.x86_64.rpm
     mytext: |
       [client]
       password=s8auyp8:ciwS
@@ -21,13 +21,18 @@
       name: mysql
       state: started
 
+  - name: Check current MySQL password
+    shell: 'mysql -e "exit"'
+    register: password
+    ignore_errors: yes
+
   - name: Get temporary password
-    shell: cat /var/log/mysqld.log | grep 'temporary password' | grep -oE '[^ ]+$'
+    shell: cat /var/log/mysqld.log | grep 'temporary password' | grep -oE '[^ ]+$' | tail -1
     register: tmp_root_password
 
   - name: Set new password from temporary password
     shell: 'mysql -e "SET PASSWORD = ''s8auyp8:ciwS'';" --connect-expired-password -uroot -p"{{ tmp_root_password.stdout }}"'
-
+    when: password.rc!=0
   - name: Creating my.cnf file for root user
     copy:
       content: "{{ mytext }}"
@@ -35,3 +40,10 @@
 
   - name: Test mydumper
     command: mydumper
+
+  - name: Test mydumper version
+    command: mydumper --version
+
+    register: cat
+  - name: Printing Version
+    debug: var=cat.stdout

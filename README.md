@@ -38,17 +38,15 @@ yum install rpm-build dpkg dpkg-devel fakeroot
 ```
 On mydumper repository execute:
 ```
-./package/build.sh $VERSION $BUILD_NUMBER
+./build.sh $VERSION $BUILD_NUMBER
 ```
 For instance:
 ```
-./package/build.sh 0.5.7 1
+./build.sh 0.10.1 1
 ```
 Testing step:
 ```
-unlik Vagrantfile
-ln -s Vagrantfile.test Vagrantfile
-vagrant up [os] --provision
+./postbuild.sh
 ```
 
 

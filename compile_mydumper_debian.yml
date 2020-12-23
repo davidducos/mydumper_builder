@@ -27,13 +27,19 @@
     apt:
       name: [ 'libglib2.0-dev','zlib1g-dev','libpcre3-dev','libssl-dev','cmake','g++','git','libperconaserverclient20-dev','libperconaserverclient20','percona-server-server-5.7' ]
       state: present
-
+  - name: clean previous run
+    file:
+       path={{ item }}
+       state=absent
+    with_items:
+       - "{{ srcdir }}/CMakeLists.txt"
   - name: mydumper git repo
     become_user: vagrant
     git:
       accept_hostkey: yes
       repo: https://github.com/maxbube/mydumper.git
       dest: "{{ srcdir }}/"
+      force: yes
       update: yes
   - name: clean previous run
     file:
@@ -43,6 +49,11 @@
         - "{{ srcdir }}/mydumper"
         - "{{ srcdir }}/myloader"
         - "{{ srcdir }}/CMakeCache.txt"
+  - name: Set the new version number
+    lineinfile:
+      path: "{{ srcdir }}/CMakeLists.txt"
+      regexp: '^set\(VERSION '
+      line: 'set(VERSION 0.10.1)'
   - name: cmake mydumper
     command: cmake . -DMYSQL_LIBRARIES_perconaserverclient:FILEPATH=/usr/lib/x86_64-linux-gnu/libperconaserverclient.a
     args:
