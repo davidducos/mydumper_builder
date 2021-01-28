@@ -3,17 +3,12 @@
   become: true
   tasks:
   - name: add percona repo
-    dnf:
-      name: https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+    yum:
+      name: https://www.percona.com/downloads/percona-release/redhat/LATEST/
       state: present
 
-  - name: disable dnf mysql module
-    command: dnf module disable mysql -y
-    args:
-      warn: false
-
   - name: ensure pre-requsites are installed
-    dnf:
+    yum:
       name:
         - glib2-devel
         - zlib-devel
@@ -24,8 +19,13 @@
         - git
       state: present
 
+  - name: remove installed mysql libs
+    yum:
+      name: mariadb-libs
+      state: absent
+
   - name: install mysql devel
-    dnf:
+    yum:
       name: 
       - Percona-Server-devel-57
       - Percona-Server-server-57
@@ -37,5 +37,4 @@
       srcdir: /tmp/mydumper
       provider: mysql
       clientlibpath: /usr/lib64/mysql/libmysqlclient.a 
-
 

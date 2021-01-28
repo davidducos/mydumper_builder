@@ -1,6 +1,12 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+compiling_version="testing"
+
+if ! ENV['compiling_version'].nil?
+  compiling_version=ENV['compiling_version']
+end 
+
 Vagrant.configure(2) do |config|
 
   # Prevent VirtualBox from enable the COM port which causes issues on some OS.
@@ -25,7 +31,10 @@ Vagrant.configure(2) do |config|
   config.vm.define :el7 do |el7|
     el7.vm.box = "centos/7"
     el7.vm.provision :ansible do |ansible|  
-      ansible.playbook = "compile_mydumper_rhel.yml"
+      ansible.playbook = "compile_mydumper_rhel7.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
     end
     el7.vm.provider "virtualbox" do |v|
       # Prevent VirtualBox from interfering with host audio stack
@@ -37,6 +46,9 @@ Vagrant.configure(2) do |config|
     el8.vm.box = "centos/8"
     el8.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_rhel8.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
     end
   end
   
@@ -53,6 +65,9 @@ Vagrant.configure(2) do |config|
     buster.vm.box = "debian/buster64"
     buster.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
     end
   end
 
@@ -61,6 +76,9 @@ Vagrant.configure(2) do |config|
     stretch.vm.box = "debian/stretch64"
     stretch.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
     end
   end
 
@@ -70,6 +88,9 @@ Vagrant.configure(2) do |config|
     #debian8.vm.box_url = "https://github.com/kraksoft/vagrant-box-debian/releases/download/8.1.0/debian-8.1.0-amd64.box"
     jessie.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
     end
   end
 
@@ -88,6 +109,9 @@ Vagrant.configure(2) do |config|
     trusty.vm.box = "ubuntu/trusty64"
     trusty.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
     end
   end
 
@@ -100,6 +124,9 @@ Vagrant.configure(2) do |config|
 #      inline: "apt-get -y install python"
     xenial.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
     end
   end
 
@@ -112,6 +139,9 @@ Vagrant.configure(2) do |config|
       inline: "apt-get -y install python"
     bionic.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
     end
     bionic.vm.provider "virtualbox" do |v|
       # Prevent VirtualBox from interfering with host audio stack
@@ -128,6 +158,9 @@ Vagrant.configure(2) do |config|
 #      inline: "apt-get -y install python"
     focal.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
+      ansible.extra_vars = {
+        version: compiling_version 
+      }
     end
   end
 

@@ -4,6 +4,10 @@
   vars:
     srcfilename: mydumper_{{ version }}-1.{{ ansible_distribution_release }}_amd64.deb
   tasks:
+  - name: Remove previous
+    apt:
+      name: mydumper
+      state: absent
   - name: Copy package
     copy:
       src: "/opt/PKGS/{{ srcfilename }}"
