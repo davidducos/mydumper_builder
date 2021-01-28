@@ -1,0 +1,17 @@
+#
+# Initial test 
+#
+
+--let $MYDUMPER = mydumper
+--let $MYLOADER = myloader
+--let $DIR = /tmp/test_01/
+
+--exec rm -rf $DIR
+CREATE DATABASE mydumper01;
+USE mydumper01;
+CREATE TABLE t1 (c1 int);
+--exec $MYDUMPER -B mydumper01 -o $DIR -S $MASTER_MYSOCK -p '' 
+--exec $MYLOADER -o -d $DIR -S $MASTER_MYSOCK -p ''
+DROP DATABASE mydumper01;
+# --exec rm -rf $DIR
+
