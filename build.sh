@@ -23,6 +23,8 @@ else
     exit 1
 fi
 
+REALVERSION=${VERSION}
+
 build_rpm() {
     ARCH=x86_64
     SUBDIR=$1
@@ -54,14 +56,14 @@ build_deb() {
     SUBDIR=$1
     DISTRO=$2
 
-    mkdir -p $WORK_DIR/${PROJECT}_$VERSION/DEBIAN $TARGET
+    mkdir -p $WORK_DIR/${PROJECT}_${VERSION}/DEBIAN $TARGET
     cd $WORK_DIR
     cp $WORKSPACE/deb/* $WORK_DIR/${PROJECT}_$VERSION/DEBIAN/
     sed -i "s/%{version}/$VERSION-$RELEASE/" $WORK_DIR/${PROJECT}_$VERSION/DEBIAN/control
     $WORKSPACE/deb/files $SOURCE/$SUBDIR $WORK_DIR/${PROJECT}_$VERSION
 
     fakeroot dpkg --build ${PROJECT}_$VERSION
-    PKG=${PROJECT}_$VERSION-${RELEASE}.${DISTRO}_${ARCH}.deb
+    PKG=${PROJECT}_$REALVERSION-${RELEASE}.${DISTRO}_${ARCH}.deb
     mv ${PROJECT}_$VERSION.deb $TARGET/$PKG
 
     echo
@@ -84,8 +86,11 @@ build_deb "bionic" "bionic"
 build_deb "focal" "focal"
 
 #build_deb "wheezy" "wheezy"
+VERSION=${REALVERSION}jessie
 build_deb "jessie" "jessie"
+VERSION=${REALVERSION}stretch
 build_deb "stretch" "stretch"
+VERSION=${REALVERSION}buster
 build_deb "buster" "buster"
 
 # Building from Jenkins

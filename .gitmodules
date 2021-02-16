@@ -1,0 +1,3 @@
+[submodule "mydumper/submodule/mydumper"]
+	path = mydumper/submodule/mydumper
+	url = https://github.com/maxbube/mydumper
