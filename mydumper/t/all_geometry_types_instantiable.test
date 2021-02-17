@@ -397,9 +397,14 @@ CREATE TABLE geom_index (fid INTEGER NOT NULL PRIMARY KEY, g GEOMETRY NOT NULL, 
 --echo # Inserting geometry values
 INSERT INTO geom_index SELECT * FROM gis_geometry;
 
-
---exec rm -rf $DIR
+--exec rm -rf $DIR1
+--exec rm -rf $DIR2
 --exec $MYDUMPER -B test1 -o $DIR1 -S $MASTER_MYSOCK -p ''
 --exec $MYLOADER -B test2 -o -d $DIR1 -S $MASTER_MYSOCK -p ''
 --exec $MYDUMPER -B test2 -o $DIR2 -S $MASTER_MYSOCK -p ''
+--echo # Starting comparasion
 
+--exec mydumper_compare.sh $DIR1 $DIR2
+
+DROP SCHEMA test1;
+DROP SCHEMA test2;
