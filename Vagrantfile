@@ -133,10 +133,10 @@ Vagrant.configure(2) do |config|
   # Ubuntu 18
   config.vm.define :bionic do |bionic|
     bionic.vm.box = "ubuntu/bionic64"
-    bionic.vm.provision "install pyhton 2.7",
-      type: "shell",
-      preserve_order: true,
-      inline: "apt-get -y install python"
+#    bionic.vm.provision "install pyhton 2.7",
+#      type: "shell",
+#      preserve_order: true,
+#      inline: "apt-get -y install python"
     bionic.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
       ansible.extra_vars = {

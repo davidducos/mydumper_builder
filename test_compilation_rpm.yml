@@ -2,7 +2,7 @@
 - hosts: all
   become: true
   vars:
-    srcfilename: mydumper-{{ version }}-1.el{{ ansible_distribution_major_version }}.x86_64.rpm
+    srcfilename: mydumper-{{ version }}-{{ iteration }}.el{{ ansible_distribution_major_version }}.x86_64.rpm
     mytext: |
       [client]
       password=s8auyp8:ciwS
@@ -12,6 +12,10 @@
       src: "/opt/PKGS/{{ srcfilename }}"
       dest: /tmp/
       #      validate: /usr/sbin/visudo -csf %s
+  - name: Remove mydumper package
+    yum:
+      name: mydumper
+      state: removed
   - name: Install package
     yum:
       name: "/tmp/{{ srcfilename }}"

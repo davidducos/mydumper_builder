@@ -2,7 +2,7 @@
 - hosts: all
   become: true
   vars:
-    srcfilename: mydumper_{{ version }}-1.{{ ansible_distribution_release }}_amd64.deb
+    srcfilename: mydumper_{{ version }}-{{ iteration }}.{{ ansible_distribution_release }}_amd64.deb
   tasks:
   - name: Remove previous
     apt:

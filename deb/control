@@ -5,6 +5,7 @@ Maintainer: Max Bubenick <maxbube@gmail.com>
 Homepage: https://github.com/maxbube/mydumper
 Package: mydumper
 Version: %{version}
+Depends: libatomic1 
 Architecture: amd64
 Description: mydumper and myloader MySQL backup tools
  This package provides mydumper and myloader MySQL backup tools.
