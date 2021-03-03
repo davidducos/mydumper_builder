@@ -1,0 +1,37 @@
+#
+
+--let $MYDUMPER = /tmp/mydumper/mydumper
+--let $MYLOADER = /tmp/mydumper/myloader
+--let $DIR1 = /tmp/test_01/
+--let $DIR2 = /tmp/test_02/
+CREATE DATABASE test1;
+USE test1;
+
+--disable_warnings
+drop table if exists t1;
+--enable_warnings
+
+create table `t1` (`c1` tinyint unsigned not null, key `c1` (`c1`))
+charset=utf8;
+insert into t1 values (1),(2),(3),(4);
+insert into t1 select * from t1;
+insert into t1 select * from t1;
+insert into t1 select * from t1;
+insert into t1 select * from t1;
+insert into t1 select * from t1;
+insert into t1 select * from t1;
+insert into t1 select * from t1;
+insert into t1 select * from t1;
+insert into t1 select * from t1;
+
+--exec rm -rf $DIR1
+--exec rm -rf $DIR2
+--exec $MYDUMPER -B test1 -o $DIR1 -S $MASTER_MYSOCK -p ''
+--exec $MYLOADER -B test2 -o -d $DIR1 -S $MASTER_MYSOCK -p ''
+--exec $MYDUMPER -B test2 -o $DIR2 -S $MASTER_MYSOCK -p ''
+--echo # Starting comparasion
+
+--exec mydumper_compare.sh $DIR1 $DIR2
+
+DROP SCHEMA test1;
+DROP SCHEMA test2;
