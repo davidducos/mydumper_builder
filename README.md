@@ -38,11 +38,11 @@ yum install rpm-build dpkg dpkg-devel fakeroot
 ```
 On mydumper repository execute:
 ```
-./build.sh $VERSION $BUILD_NUMBER
+./new_release.sh $VERSION $BUILD_NUMBER
 ```
 For instance:
 ```
-./build.sh 0.10.1 1
+./new_release.sh 0.10.3 1
 ```
 Testing step:
 ```
