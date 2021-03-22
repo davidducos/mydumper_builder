@@ -33,5 +33,4 @@
       srcdir: /tmp/mydumper
       provider: perconaserver
       clientlibpath: /usr/lib/x86_64-linux-gnu/libperconaserverclient.a
-
-
+      mydumperrepo: https://github.com/maxbube/mydumper.git

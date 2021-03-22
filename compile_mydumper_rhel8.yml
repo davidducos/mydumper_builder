@@ -37,5 +37,4 @@
       srcdir: /tmp/mydumper
       provider: mysql
       clientlibpath: /usr/lib64/mysql/libmysqlclient.a 
-
-
+      mydumperrepo: https://github.com/maxbube/mydumper.git

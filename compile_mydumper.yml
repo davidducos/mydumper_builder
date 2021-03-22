@@ -9,7 +9,7 @@
     become_user: vagrant
     git:
       accept_hostkey: yes
-      repo: https://github.com/maxbube/mydumper.git
+      repo: {{ mydumperrepo }} 
       dest: "{{ srcdir }}/"
       force: yes
       update: yes
