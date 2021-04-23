@@ -1,0 +1,17 @@
+---
+- hosts: all
+  become: true
+  vars:
+    srcdir: /tmp/mydumper
+  tasks:
+  - name: ensure pre-requsites are installed
+    command: emerge cmake
+
+    #      state: emerged 
+      #  - name: Start compiling
+      #    include_tasks: compile_mydumper.yml
+      #    vars:
+      #      srcdir: /tmp/mydumper
+      #      provider: perconaserver
+      #      clientlibpath: /usr/lib/x86_64-linux-gnu/libperconaserverclient.a
+      #      mydumperrepo: https://github.com/maxbube/mydumper.git
