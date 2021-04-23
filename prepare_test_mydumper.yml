@@ -2,21 +2,14 @@
 - hosts: all
   become: true
   tasks:
-  - name: Install required package
-    apt:
-      name: percona-server-test-5.7
-      state: present
-  - name: Copy the testing environment
+  - name: Copy test script
     copy:
-      src: mydumper
-      dest: /usr/lib/mysql-test/suite
-  - name: Copy the testing script
+      src: test
+      dest: /root/
+  - name: Copy test script
     copy:
-      src: mydumper_test.sh
-      dest: /usr/local/bin/
-      mode: 755
-  - name: Copy the compare tool
-    copy:
-      src: mydumper_compare.sh
-      dest: /usr/local/bin/
-      mode: 755
+      src: test_mydumper.sh
+      mode: 0755 
+      dest: /root/
+  - name: execute
+    command: /root/test_mydumper.sh 

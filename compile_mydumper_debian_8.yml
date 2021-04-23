@@ -19,21 +19,27 @@
       keyserver: "hkp://keys.gnupg.net:80"
       id: 9334A25F8507EFA5
       state: present
-  - name: add percona repo
-    apt_repository: 
-      repo='deb http://repo.percona.com/apt {{ ansible_distribution_release }} main' 
-      state=present
+      #  - name: Download percona repository pacakge
+      #    get_url:
+      #      url: "https://repo.percona.com/apt/percona-release_latest{{ ansible_distribution_release }}_all.deb"
+      #      dest: /root/percona-release_latest_all.deb
+  - name: Install percona repository
+    apt:
+      deb: "https://repo.percona.com/apt/percona-release_latest.{{ ansible_distribution_release }}_all.deb"
+  - name:
+    command: percona-release setup ps80
+
   - name: ensure pre-requsites are installed
     apt:
       name: [ 'cmake','g++','git' ]
       state: present
   - name: ensure pre-requsites to compile are installed
     apt:
-      name: [ 'libglib2.0-dev','libperconaserverclient20-dev','zlib1g-dev','libpcre3-dev','libssl-dev' ]
+      name: [ 'libglib2.0-dev','libperconaserverclient21-dev','zlib1g-dev','libpcre3-dev','libssl-dev' ]
       state: present
   - name: ensure pre-requsites for testing are installed
     apt:
-      name: [ 'libperconaserverclient20','percona-server-server-5.7' ]
+      name: [ 'libperconaserverclient21','percona-server-server' ]
       state: present
   - name: Start compiling
     include_tasks: compile_mydumper.yml
@@ -41,4 +47,5 @@
       srcdir: /tmp/mydumper
       provider: perconaserver
       clientlibpath: /usr/lib/x86_64-linux-gnu/libperconaserverclient.a
-      mydumperrepo: https://github.com/maxbube/mydumper.git
+      mydumperrepo: https://github.com/maxbube/mydumper.git      
+

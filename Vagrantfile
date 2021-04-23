@@ -164,6 +164,28 @@ Vagrant.configure(2) do |config|
     end
   end
 
+  # Ubuntu 20.04
+  config.vm.define :focal8 do |focal8|
+    focal8.vm.box = "ubuntu/focal64"
+    focal8.vm.provision :ansible do |ansible|
+      ansible.playbook = "compile_mydumper_debian_8.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
+    end
+  end
+
+  # Gentoo
+  config.vm.define :gentoo do |gentoo|
+    gentoo.vm.box = "generic/gentoo"
+    gentoo.vm.provision :ansible do |ansible|
+      ansible.playbook = "compile_mydumper_gentoo.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
+    end
+  end
+
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
 end

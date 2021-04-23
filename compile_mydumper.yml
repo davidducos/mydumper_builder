@@ -9,7 +9,7 @@
     become_user: vagrant
     git:
       accept_hostkey: yes
-      repo: {{ mydumperrepo }} 
+      repo: "{{ mydumperrepo }}"
       dest: "{{ srcdir }}/"
       force: yes
       update: yes
