@@ -1,17 +1,25 @@
 ---
 - hosts: all
   become: true
-  vars:
-    srcdir: /tmp/mydumper
   tasks:
   - name: ensure pre-requsites are installed
     command: emerge cmake
-
-    #      state: emerged 
-      #  - name: Start compiling
-      #    include_tasks: compile_mydumper.yml
-      #    vars:
-      #      srcdir: /tmp/mydumper
-      #      provider: perconaserver
-      #      clientlibpath: /usr/lib/x86_64-linux-gnu/libperconaserverclient.a
-      #      mydumperrepo: https://github.com/maxbube/mydumper.git
+  - name: Installing prerequesing
+    command: emerge dev-vcs/git
+  - name: Configugin glib
+    copy:
+      dest: "/etc/portage/package.use/zz-autounmask"
+      content: "# package.use\n
+>=dev-libs/libxml2-2.9.10-r4 python_targets_python3_8"
+  - name: Installing glib
+    command: emerge  dev-libs/glib
+  - name: Instaling mysql
+    command: emerge mysqlclient
+  - name: Start compiling
+    include_tasks: compile_mydumper.yml
+    vars:
+      srcdir: /tmp/mydumper
+      provider: perconaserver
+      clientlibpath: /usr/lib/x86_64-linux-gnu/libperconaserverclient.a
+      mydumperrepo: https://github.com/maxbube/mydumper.git
+      cmake_options: "{{ extra_cmake_options | default('') }}"

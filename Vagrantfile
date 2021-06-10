@@ -39,6 +39,7 @@ Vagrant.configure(2) do |config|
     el7.vm.provider "virtualbox" do |v|
       # Prevent VirtualBox from interfering with host audio stack
       v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
     end
   end
 
@@ -49,6 +50,11 @@ Vagrant.configure(2) do |config|
       ansible.extra_vars = {
         version: compiling_version
       }
+    end
+    el8.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
     end
   end
   
@@ -61,6 +67,22 @@ Vagrant.configure(2) do |config|
 #  end
 
   # Debian 10
+  config.vm.define :buster8 do |buster8|
+    buster8.vm.box = "debian/buster64"
+    buster8.vm.provision :ansible do |ansible|
+      ansible.playbook = "compile_mydumper_debian_8.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
+    end
+    buster8.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
+    end
+  end
+
+  # Debian 10
   config.vm.define :buster do |buster|
     buster.vm.box = "debian/buster64"
     buster.vm.provision :ansible do |ansible|
@@ -68,6 +90,11 @@ Vagrant.configure(2) do |config|
       ansible.extra_vars = {
         version: compiling_version
       }
+    end
+    buster.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
     end
   end
 
@@ -80,31 +107,62 @@ Vagrant.configure(2) do |config|
         version: compiling_version
       }
     end
+    stretch.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
+    end
+  end
+
+  # Debian 9
+  config.vm.define :stretch8 do |stretch8|
+    stretch8.vm.box = "debian/stretch64"
+    stretch8.vm.provision :ansible do |ansible|
+      ansible.playbook = "compile_mydumper_debian_8.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
+    end
+    stretch8.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
+    end
   end
 
   # Debian 8
   config.vm.define :jessie do |jessie|
     jessie.vm.box = "debian/jessie64"
-    #debian8.vm.box_url = "https://github.com/kraksoft/vagrant-box-debian/releases/download/8.1.0/debian-8.1.0-amd64.box"
     jessie.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
       ansible.extra_vars = {
         version: compiling_version
       }
     end
+    jessie.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
+    end
   end
 
-  # Debian 7
-# I decided not support wheezy anymore until I have time to sort the issues out 
-#  config.vm.define :wheezy do |wheezy|
-#    wheezy.vm.box = "debian/wheezy64"
-    #debian7.vm.box_url = "https://github.com/kraksoft/vagrant-box-debian/releases/download/7.8.0/debian-7.8.0-amd64.box"
-#    wheezy.vm.provision :ansible do |ansible|
-#      ansible.playbook = "compile_mydumper_debian.yml"
-#    end
-#  end
+  # Debian 8
+  config.vm.define :jessie8 do |jessie8|
+    jessie8.vm.box = "debian/jessie64"
+    jessie8.vm.provision :ansible do |ansible|
+      ansible.playbook = "compile_mydumper_debian_8.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
+    end
+    jessie8.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
+    end
+  end
 
-  # Ubuntu 14
+  # Ubuntu 14.04
   config.vm.define :trusty do |trusty|
     trusty.vm.box = "ubuntu/trusty64"
     trusty.vm.provision :ansible do |ansible|
@@ -113,30 +171,48 @@ Vagrant.configure(2) do |config|
         version: compiling_version
       }
     end
+    trusty.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
+    end
   end
 
-  # Ubuntu 16
+  # Ubuntu 16.04
   config.vm.define :xenial do |xenial|
     xenial.vm.box = "ubuntu/xenial64"
-#    xenial.vm.provision "install pyhton 2.7",
-#      type: "shell",
-#      preserve_order: true,
-#      inline: "apt-get -y install python"
     xenial.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
       ansible.extra_vars = {
         version: compiling_version
       }
     end
+    xenial.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
+    end
   end
 
-  # Ubuntu 18
+  # Ubuntu 16.04
+  config.vm.define :xenial8 do |xenial8|
+    xenial8.vm.box = "ubuntu/xenial64"
+    xenial8.vm.provision :ansible do |ansible|
+      ansible.playbook = "compile_mydumper_debian_8.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
+    end
+    xenial8.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
+    end
+  end
+
+  # Ubuntu 18.04
   config.vm.define :bionic do |bionic|
     bionic.vm.box = "ubuntu/bionic64"
-#    bionic.vm.provision "install pyhton 2.7",
-#      type: "shell",
-#      preserve_order: true,
-#      inline: "apt-get -y install python"
     bionic.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
       ansible.extra_vars = {
@@ -146,21 +222,39 @@ Vagrant.configure(2) do |config|
     bionic.vm.provider "virtualbox" do |v|
       # Prevent VirtualBox from interfering with host audio stack
       v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
+    end
+  end
+
+  # Ubuntu 18.04
+  config.vm.define :bionic8 do |bionic8|
+    bionic8.vm.box = "ubuntu/bionic64"
+    bionic8.vm.provision :ansible do |ansible|
+      ansible.playbook = "compile_mydumper_debian_8.yml"
+      ansible.extra_vars = {
+        version: compiling_version
+      }
+    end
+    bionic8.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
     end
   end
 
   # Ubuntu 20.04
   config.vm.define :focal do |focal|
     focal.vm.box = "ubuntu/focal64"
-#    focal.vm.provision "install pyhton 2.7",
-#      type: "shell",
-#      preserve_order: true,
-#      inline: "apt-get -y install python"
     focal.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
       ansible.extra_vars = {
         version: compiling_version 
       }
+    end
+    focal.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
     end
   end
 
@@ -173,6 +267,11 @@ Vagrant.configure(2) do |config|
         version: compiling_version
       }
     end
+    focal8.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
+    end
   end
 
   # Gentoo
@@ -183,6 +282,11 @@ Vagrant.configure(2) do |config|
       ansible.extra_vars = {
         version: compiling_version
       }
+    end
+    gentoo.vm.provider "virtualbox" do |v|
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+      v.memory = 1024
     end
   end
 

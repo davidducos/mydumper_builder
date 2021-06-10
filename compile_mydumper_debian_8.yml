@@ -4,6 +4,9 @@
   vars:
     srcdir: /tmp/mydumper
   tasks:
+  - name: Set a hostname
+    ansible.builtin.hostname:
+      name: "{{ inventory_hostname }}" 
   - name: debian 9 needs dirmngr
     apt: 
       name: dirmngr
@@ -26,6 +29,7 @@
   - name: Install percona repository
     apt:
       deb: "https://repo.percona.com/apt/percona-release_latest.{{ ansible_distribution_release }}_all.deb"
+      update_cache: yes
   - name:
     command: percona-release setup ps80
 
@@ -38,14 +42,16 @@
       name: [ 'libglib2.0-dev','libperconaserverclient21-dev','zlib1g-dev','libpcre3-dev','libssl-dev' ]
       state: present
   - name: ensure pre-requsites for testing are installed
-    apt:
-      name: [ 'libperconaserverclient21','percona-server-server' ]
-      state: present
+    command: apt-get -y install percona-server-server libperconaserverclient21
+    environment:
+      DEBIAN_FRONTEND: noninteractive
+      
   - name: Start compiling
     include_tasks: compile_mydumper.yml
     vars:
       srcdir: /tmp/mydumper
       provider: perconaserver
       clientlibpath: /usr/lib/x86_64-linux-gnu/libperconaserverclient.a
-      mydumperrepo: https://github.com/maxbube/mydumper.git      
-
+      mydumperrepo: https://github.com/maxbube/mydumper.git 
+      cmake_options: "{{ extra_cmake_options | default('') }}"      
+      branch: master

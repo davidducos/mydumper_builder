@@ -42,3 +42,5 @@
       provider: perconaserver
       clientlibpath: /usr/lib/x86_64-linux-gnu/libperconaserverclient.a
       mydumperrepo: https://github.com/maxbube/mydumper.git
+      cmake_options: "{{ extra_cmake_options | default('') }}"      
+      branch: master

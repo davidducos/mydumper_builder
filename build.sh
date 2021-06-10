@@ -7,9 +7,7 @@
 SOURCE=/tmp/src/mydumper
 TARGET=/opt/PKGS
 WORK_DIR=/tmp/pkgbuild-`date +%s`
-YUM_REPO=/usr/share/nginx/html/rpm-contrib
-APT_REPO=/usr/share/nginx/html/deb-contrib
-
+EXTRA_SUFFIX=""
 set -e
 
 PROJECT=mydumper
@@ -63,7 +61,7 @@ build_deb() {
     $WORKSPACE/deb/files $SOURCE/$SUBDIR $WORK_DIR/${PROJECT}_$VERSION
 
     fakeroot dpkg --build ${PROJECT}_$VERSION
-    PKG=${PROJECT}_$REALVERSION-${RELEASE}.${DISTRO}_${ARCH}.deb
+    PKG=${PROJECT}_$REALVERSION-${RELEASE}${EXTRA_SUFFIX}.${DISTRO}_${ARCH}.deb
     mv ${PROJECT}_$VERSION.deb $TARGET/$PKG
 
     echo
@@ -93,26 +91,21 @@ build_deb "stretch" "stretch"
 VERSION=${REALVERSION}buster
 build_deb "buster" "buster"
 
-# Building from Jenkins
-if [ -n "${JOB_NAME}" ]; then
-    cd $TARGET
-#    mv *.el6.x86_64.rpm $YUM_REPO/6
-    mv *.el7.x86_64.rpm $YUM_REPO/7
-    mv *.el8.x86_64.rpm $YUM_REPO/8
-    createrepo --update $YUM_REPO/6
-    createrepo --update $YUM_REPO/7
-    createrepo --update $YUM_REPO
-    echo "YUM repo updated."
-    echo
-#    for DISTRO in {trusty,xenial,wheezy,jessie,stretch,bionic}; do 
-    for DISTRO in {trusty,xenial,bionic,focal,jessie,stretch,buster}; do
-        cd $TARGET
-        mv *.${DISTRO}_amd64.deb $APT_REPO/$DISTRO/
-        cd $APT_REPO/$DISTRO
-        dpkg-scanpackages -m . | gzip -9c > Packages.gz; gunzip -c Packages.gz > Packages
-    done
-    echo "APT repo updated."
-    echo
-fi
+
+EXTRA_SUFFIX="-80"
+build_deb "xenial8" "xenial"
+build_deb "bionic8" "bionic"
+build_deb "focal8" "focal"
+
+#build_deb "wheezy" "wheezy"
+VERSION=${REALVERSION}jessie
+build_deb "jessie8" "jessie"
+VERSION=${REALVERSION}stretch
+build_deb "stretch8" "stretch"
+VERSION=${REALVERSION}buster
+build_deb "buster8" "buster"
+
+
+
 
 exit 0

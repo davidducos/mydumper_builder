@@ -1,6 +1,7 @@
 ---
 - hosts: all
   become: true
+  serial: 1
   tasks:
   - name: Copy test script
     copy:
@@ -11,5 +12,10 @@
       src: test_mydumper.sh
       mode: 0755 
       dest: /root/
+  - name: "Stop mysql service"
+    service:
+      name: mysql
+      state: stopped
   - name: execute
-    command: /root/test_mydumper.sh 
+    command: /root/test_mydumper.sh
+ 

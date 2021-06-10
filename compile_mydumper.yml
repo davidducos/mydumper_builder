@@ -13,6 +13,10 @@
       dest: "{{ srcdir }}/"
       force: yes
       update: yes
+      version: "{{ branch }}"
+    environment:
+      GIT_SSL_NO_VERIFY: 1
+
   - name: clean previous run
     file:
        path={{ item }}
@@ -27,9 +31,11 @@
       regexp: '^set\(VERSION '
       line: 'set(VERSION {{ version }})'
   - name: cmake mydumper
-    command: "cmake . -DMYSQL_LIBRARIES_{{ provider }}client:FILEPATH={{ clientlibpath }}"
+    command: "cmake . -DMYSQL_LIBRARIES_{{ provider }}client:FILEPATH={{ clientlibpath }} {{ other_options }}"
     args:
       chdir: "{{ srcdir }}"
+    vars:
+      other_options: "{{ cmake_options | default('') }}"
   - name: make mydumper
     make: chdir={{ srcdir }}
   - name: fetch binaries
